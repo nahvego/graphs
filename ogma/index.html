@@ -1,0 +1,445 @@
+
+
+          
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="//mrdoob.github.io/stats.js/build/stats.min.js"></script>
+  <script src="ogma.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+
+    #graph-container {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      position: absolute;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #ui {
+      text-align: center;
+    }
+
+    h4 {
+      margin: 15px 5px 5px 5px;
+    }
+
+    .toolbar {
+      display: block;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+      border-radius: 4px;
+      background: #ffffff;
+      color: #222222;
+      font-weight: 300;
+    }
+
+    .controls {
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    #stats {
+      padding: 20px;
+    }
+
+    #stats div {
+      margin: 0 auto;
+      width: 80px;
+    }
+
+    .btn {
+      padding: 6px 8px;
+      background-color: white;
+      cursor: pointer;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .btn:hover {
+      color: #333;
+      background-color: #e6e6e6;
+    }
+
+    .menu {
+      border: 1px solid #ddd;
+      width: 80%;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .loader {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .spinner {
+      width: 80px;
+      height: 80px;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -moz-transform: translateX(-50%) translateY(-50%);
+      -webkit-transform: translateX(-50%) translateY(-50%);
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    .double-bounce1,
+    .double-bounce2 {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #00441b;
+      opacity: 0.6;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+      animation: sk-bounce 2.0s infinite ease-in-out;
+    }
+
+    .double-bounce2 {
+      -webkit-animation-delay: -1.0s;
+      animation-delay: -1.0s;
+    }
+
+    @-webkit-keyframes sk-bounce {
+
+      0%,
+      100% {
+        -webkit-transform: scale(0.0)
+      }
+
+      50% {
+        -webkit-transform: scale(1.0)
+      }
+    }
+
+    @keyframes sk-bounce {
+
+      0%,
+      100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+      }
+
+      50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+      }
+    }
+
+    .switch {
+      width: 100%;
+      position: relative;
+    }
+
+    .switch input {
+      position: absolute;
+      top: 0;
+      z-index: 2;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .switch input:checked {
+      z-index: 1;
+    }
+
+    .switch input:checked+label {
+      opacity: 1;
+      cursor: default;
+    }
+
+    .switch input:not(:checked)+label:hover {
+      opacity: 0.5;
+    }
+
+    .switch label {
+      color: #222222;
+      opacity: 0.33;
+      transition: opacity 0.25s ease;
+      cursor: pointer;
+    }
+
+    .switch .toggle-outside {
+      height: 1.50rem;
+      border-radius: 2rem;
+      padding: 0.25rem;
+      overflow: hidden;
+      transition: 0.25s ease all;
+    }
+
+    .switch .toggle-inside {
+      border-radius: 2.5rem;
+      background: #4a4a4a;
+      position: absolute;
+      transition: 0.25s ease all;
+    }
+
+    .switch--horizontal {
+      width: 15rem;
+      height: 2rem;
+      margin: 0 auto;
+      font-size: 0;
+      margin-bottom: 1rem;
+    }
+
+    .switch--horizontal input {
+      height: 2rem;
+      width: 5rem;
+      left: 5rem;
+      margin: 0;
+    }
+
+    .switch--horizontal label {
+      font-size: 1rem;
+      line-height: 2rem;
+      display: inline-block;
+      width: 5rem;
+      height: 100%;
+      margin: 0;
+      text-align: center;
+    }
+
+    .switch--horizontal label:last-of-type {
+      margin-left: 5rem;
+    }
+
+    .switch--horizontal .toggle-outside {
+      background: #dddddd;
+      position: absolute;
+      width: 4.5rem;
+      left: 5rem;
+    }
+
+    .switch--horizontal .toggle-inside {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
+    .switch--horizontal input:checked~.toggle-outside .toggle-inside {
+      left: 0.25rem;
+    }
+
+    .switch--horizontal input~input:checked~.toggle-outside .toggle-inside {
+      left: 3.25rem;
+    }
+
+    .switch--horizontal input:disabled~.toggle-outside .toggle-inside {
+      background: #9a9a9a;
+    }
+
+    .switch--horizontal input:disabled~label {
+      color: #9a9a9a;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
+</head>
+
+<body>
+
+  <div id="graph-container"></div>
+  <div class="toolbar" id="ui">
+    <div class="switch switch--horizontal">
+      <input type="radio" name="renderer-switch" value="webgl" checked="checked" autocomplete="off" />
+      <label for="webgl">WebGL</label>
+      <input type="radio" name="renderer-switch" value="canvas" autocomplete="off" />
+      <label for="canvas">Canvas</label>
+      <span class="toggle-outside">
+        <span class="toggle-inside"></span>
+      </span>
+    </div>
+    <div class="controls">
+      <button id="small" name="dataset" class="btn menu">50 nodes</button>
+      <button id="medium" name="dataset" class="btn menu">500 nodes</button>
+      <button id="big" name="dataset" class="btn menu">3000 nodes</button>
+    </div>
+    <div class="controls">
+      <h4>Stress tests</h4>
+      <button id="animate" class="btn menu">Animate</button>
+      <button id="layout" class="btn menu">Layout</button>
+    </div>
+    <h4>Metrics</h4>
+    <div id="stats"></div>
+    <div id="layout-stats">Layout time: ...</div>
+  </div>
+  <div class="loader">
+    <div class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
+  </div>
+  <script>
+    function addStatsPanel() {
+      var stats = new Stats();
+      stats.showPanel(0);
+      document.querySelector('#stats').appendChild(stats.dom);
+      requestAnimationFrame(function loop() {
+        stats.update();
+        requestAnimationFrame(loop)
+      });
+      stats.dom.style.position = null;
+      stats.dom.style.left = null;
+      stats.dom.style.top = null;
+      stats.dom.addEventListener('click', function () {
+        stats.showPanel(0);
+      }, false);
+    }
+
+    var ogma = new Ogma({
+      container: 'graph-container'
+    });
+
+    // add the stats utility
+    addStatsPanel()
+
+    var SIZES = {
+      small: 50,
+      medium: 500,
+      big: 3000
+    }
+    var COLOR_STEPS = ['#c7e9c0', '#74c476', '#238b45', '#00441b']
+    var minVisibleSize = 0;
+    var w = document.documentElement.clientWidth;
+    var h = document.documentElement.clientHeight;
+    var isAnimated = false;
+
+    function loadGraph(size) {
+      return ogma.parse.jsonFromUrl("../nodes_d3_3000_1000.json", function (input) {
+        return { nodes: input.nodes, edges: input.links};
+      })
+        .then(function (graph) {
+          return ogma.setGraph(graph);
+        })
+        .then(function () {
+          return ogma.view.locateGraph();
+        });
+    }
+
+    function runLayout() {
+      var start = Date.now();
+      toggleLoader(true);
+      return ogma.layouts.force({
+        locate: { padding: 50 },
+      }).then(function () {
+        toggleLoader(false)
+        updateLayoutTiming(Date.now() - start);
+      });
+    }
+
+    // Animate nodes and edges by position and colors
+    function animate(i) {
+      var newColor = COLOR_STEPS[i] || COLOR_STEPS[0];
+      var nodes = ogma.getNodes();
+      var edges = ogma.getEdges();
+      var duration = 3000;
+
+      if (isAnimated) {
+        ogma.styles.setNodeTextsVisibility(false);
+        return Promise.all([
+          edges.setAttribute('color', newColor, duration),
+          nodes.setAttributes({
+            x: function () { return Math.random() * w; },
+            y: function () { return Math.random() * h; },
+            color: newColor
+          }, duration)
+        ]).then(function () {
+          return animate((i + 1) % COLOR_STEPS.length);
+        });
+      } else {
+        ogma.styles.setNodeTextsVisibility(true);
+      }
+    }
+
+    function toggleLoader(show) {
+      document.querySelector('.loader').style.display = show ? 'block' : 'none';
+    }
+
+    function updateLayoutTiming(duration) {
+      var formattedTime = (duration / 1000).toFixed(2);
+      var message = 'Layout time: ' + formattedTime + 's for ' + ogma.getNodes().size + ' nodes';
+      document.querySelector('#layout-stats').innerText = message;
+    }
+
+    function updateAnimateButton() {
+      var newLabel = isAnimated ? 'Stop animation' : 'Animate';
+      document.querySelector('#animate').innerText = newLabel;
+    }
+
+    document.querySelectorAll('button[name="dataset"]').forEach(function (button) {
+      button.addEventListener('click', function (evt) {
+
+        isAnimated = false;
+        updateAnimateButton();
+
+        evt.preventDefault();
+        var id = evt.target.id;
+        var size = SIZES[id];
+        loadGraph(size);
+      }, false)
+    });
+
+    document.querySelector('#layout').addEventListener('click', function () {
+      isAnimated = false;
+      updateAnimateButton();
+      runLayout();
+    }, false);
+
+    document.querySelector('#animate').addEventListener('click', function (evt) {
+      isAnimated = evt.target.innerText === 'Animate';
+      animate(0);
+      updateAnimateButton();
+    }, false);
+
+    var switches = document.querySelectorAll('#ui [name=renderer-switch]');
+
+    switches.forEach(function (input) {
+      input.addEventListener('click', function (evt) {
+        var mode = evt.target.value;
+        ogma.setOptions({ renderer: mode });
+      });
+    });
+
+    ogma.events.onRendererStateChange(function (evt) {
+      // Fallback to Canvas if WebGL is not supported
+      if (evt.code === 'NO_WEBGL') {
+        switches.forEach(function (input) {
+          input.checked = input.value === 'canvas';
+          input.disabled = input.value !== 'canvas';
+        })
+      }
+    })
+
+    loadGraph(SIZES.medium).then(runLayout);
+  </script>
+</body>
+
+</html>
+
+        
+

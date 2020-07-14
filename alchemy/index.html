@@ -40,9 +40,14 @@
     }
         performance.mark("alchemy");
         var config = {
-            dataSource: "../data/nodes_gj_20_3_5.json",
+            dataSource: "../data/nodes_gj_3000_5000_5.json",
+            // dataSource: "cluster.json",
+            nodeCaption: 'name', 
+        	nodeMouseOver: 'name',
             cluster: true,
             clusterColours: ["#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02"],
+            // clusterControl: true,
+            // showControlDash: true,
             afterLoad: function() {
               console.log("loaded");
               const m = performance.measure("Alchemy load", "alchemy"); // non standard

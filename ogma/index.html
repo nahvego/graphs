@@ -331,7 +331,7 @@
     var isAnimated = false;
 
     function loadGraph(size) {
-      return ogma.parse.jsonFromUrl("../data/nodes_d3_500_200_5.json", function (input) {
+      return ogma.parse.jsonFromUrl("../data/nodes_d3_3000_5000_5.json", function (input) {
         return { nodes: input.nodes, edges: input.links};
       })
         .then(function (graph) {

@@ -11,6 +11,8 @@ try {
 
     const clusterCount = +process.argv[4] || 0;
 
+    const linkClusterOnly = true;
+
     // https://raw.githubusercontent.com/philipperemy/name-dataset
 
     function randInt(min, max) { // [min, max)
@@ -64,7 +66,7 @@ try {
         while (count < linkSaturation) {
             const origin = randInt(0, nodeCount) + 1;
             const target = randInt(0, nodeCount) + 1;
-            //if (nodes[origin - 1].cluster !== nodes[target - 1].cluster) continue;
+            if (linkClusterOnly && nodes[origin - 1].cluster !== nodes[target - 1].cluster) continue;
             const link = `${origin}:${target}`;
             if (!map[link]) {
                 map[link] = 1;
@@ -72,7 +74,7 @@ try {
             }
         }
         relations = Object.keys(map).map(k => {
-            const [ source, target ] = k.split(":");
+            const [ source, target ] = k.split(":").map(s => +s);
             return {
                 source,
                 target,

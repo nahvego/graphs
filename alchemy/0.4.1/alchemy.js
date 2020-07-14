@@ -302,9 +302,10 @@
         var clusterMap, nodesByCluster;
         clusterMap = this.a.layout._clustering.clusterMap;
         nodesByCluster = {};
+        var self = this;
         _.each(clusterMap, function(key, value) {
-          return nodesByCluster[value] = _.select(this.a.get.allNodes(), function(node) {
-            return node.getProperties()[this.a.conf.clusterKey] === value;
+          return nodesByCluster[value] = _.select(self.a.get.allNodes(), function(node) {
+            return node.getProperties()[self.a.conf.clusterKey] === value;
           });
         });
         return nodesByCluster;

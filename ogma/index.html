@@ -510,7 +510,7 @@
 
     ogma.styles.addNodeRule({
       text: {
-        content: function (node) { return node.getId(); }
+        content: function (node) { return node.getData("name"); }
       }
     });
 

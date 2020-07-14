@@ -74,6 +74,11 @@ try {
         links: [],
     };
 
+    const GraphJSON = {
+        nodes: [],
+        edges: [],
+    };
+
     console.info("Pushing nodes");
     D3Object.nodes = nodes;
     nodes.forEach(n => {
@@ -89,6 +94,31 @@ try {
         D3Object.links = relations;
     }
     await fs.writeFile(`nodes_d3_${nodeCount}_${linkSaturation}.json`, JSON.stringify(D3Object, undefined, 4), "utf8");
+    // .then(json => {
+        //     json.nodes.forEach(n => {
+        //         n.caption = n.name;
+        //         delete n.name;
+        //     });
+        //     json.links.forEach(l => {
+        //         l.caption = `${l.source}-${l.target}`;
+        //     });
+        //     json.edges = json.links;
+        //     delete json.links;
+        //     return json;
+        // })
+
+    // GraphJSON!
+    // Care, overwrites!
+    GraphJSON.nodes = D3Object.nodes.map(n => {
+        n.caption = n.name;
+        delete n.name;
+        return n;
+    });
+    GraphJSON.edges = D3Object.links;
+    GraphJSON.edges.forEach(e => {
+        e.caption = `${e.source}-${e.target}`;
+    });
+    await fs.writeFile(`nodes_gj_${nodeCount}_${linkSaturation}.json`, JSON.stringify(GraphJSON, undefined, 4), "utf8");
 
 }());
 } catch (e) {

@@ -1,0 +1,60 @@
+<html>
+<head>
+  <link rel="stylesheet" href="0.4.1/alchemy.min.css"/>
+  <style type="text/css">
+    #stats-c {
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      right: 0;
+      background-color: #FFF;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="stats-c">
+    <div id="stats"></div>
+    <div id="time"></div>
+  </div>
+  <div class="alchemy" id="alchemy"></div>
+
+  <script src="//mrdoob.github.io/stats.js/build/stats.min.js"></script>
+  <script src="0.4.1/scripts/vendor.js"></script>
+  <script src="0.4.1/alchemy.min.js"></script>
+  <script type="text/javascript">
+    function addStatsPanel() {
+      var stats = new Stats();
+      stats.showPanel(0);
+      document.querySelector('#stats').appendChild(stats.dom);
+      requestAnimationFrame(function loop() {
+        stats.update();
+        requestAnimationFrame(loop)
+      });
+      stats.dom.style.position = null;
+      stats.dom.style.left = null;
+      stats.dom.style.top = null;
+      stats.dom.addEventListener('click', function () {
+        stats.showPanel(0);
+      }, false);
+    }
+        performance.mark("alchemy");
+        var config = {
+            dataSource: "../nodes_gj_3000_1000.json",
+            afterLoad: function() {
+              console.log("loaded");
+              const m = performance.measure("Alchemy load", "alchemy"); // non standard
+              document.getElementById("time").innerText = m.duration.toFixed(2) + " ms";
+              performance.clearMarks();
+              performance.clearMeasures();
+            },
+        };
+
+        alchemy = new Alchemy(config);
+        
+        //
+        addStatsPanel();
+
+    </script>
+  </body>
+</html>

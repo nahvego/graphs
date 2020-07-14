@@ -105,7 +105,7 @@ try {
     if (relations.length > 0) {
         D3Object.links = relations;
     }
-    await fs.writeFile(`nodes_d3_${nodeCount}_${linkSaturation}_${clusterCount}.json`, JSON.stringify(D3Object, undefined, 4), "utf8");
+    await fs.writeFile(`data/nodes_d3_${nodeCount}_${linkSaturation}_${clusterCount}.json`, JSON.stringify(D3Object, undefined, 4), "utf8");
     // .then(json => {
         //     json.nodes.forEach(n => {
         //         n.caption = n.name;
@@ -130,7 +130,7 @@ try {
     GraphJSON.edges.forEach(e => {
         e.caption = `${e.source}-${e.target}`;
     });
-    await fs.writeFile(`nodes_gj_${nodeCount}_${linkSaturation}_${clusterCount}.json`, JSON.stringify(GraphJSON, undefined, 4), "utf8");
+    await fs.writeFile(`data/nodes_gj_${nodeCount}_${linkSaturation}_${clusterCount}.json`, JSON.stringify(GraphJSON, undefined, 4), "utf8");
 
 }());
 } catch (e) {

@@ -314,6 +314,7 @@
     var ogma = new Ogma({
       container: 'graph-container'
     });
+    window.og = ogma;
 
     // add the stats utility
     addStatsPanel()
@@ -330,7 +331,7 @@
     var isAnimated = false;
 
     function loadGraph(size) {
-      return ogma.parse.jsonFromUrl("../nodes_d3_3000_1000.json", function (input) {
+      return ogma.parse.jsonFromUrl("../nodes_d3_500_200_5.json", function (input) {
         return { nodes: input.nodes, edges: input.links};
       })
         .then(function (graph) {
@@ -341,6 +342,7 @@
         });
     }
 
+    let transformation = null;
     function runLayout() {
       var start = Date.now();
       toggleLoader(true);
@@ -349,6 +351,57 @@
       }).then(function () {
         toggleLoader(false)
         updateLayoutTiming(Date.now() - start);
+
+        // group!
+        if (!transformation) {
+          transformation = ogma.transformations.addNodeGrouping({
+            groupIdFunction: function (node) {
+              return node.getData("cluster");
+            },
+            nodeGenerator: function (nodes, cluster) {
+              return {
+                id: 'special group ' + cluster,
+                data: {
+                  cluster: cluster,
+                },
+                attributes: {
+                  text: `Cluster ${cluster}`,
+                  color: `#${Math.floor(Math.random() * 255 *255 * 255).toString(16)}`,
+                  opacity: 0.32
+                }
+              };
+            },
+            edgeGenerator: function (edges, id) {
+              return {
+                id: id,
+                attributes: {
+                  // logarithmic scale for the grouped edges width
+                  width: 1 + Math.log(edges.size),
+                  opacity: 0.5
+                }
+              };
+            },
+            showContents: function (metaNode) {
+              return true;
+            },
+            onCreated: function (metaNode, visible, subNodes, subEdges) {
+              if (visible) {
+                subNodes.setAttributes(
+                  Ogma.geometry.computeCentroid(subNodes.getAttributes(['x', 'y']))
+                );
+                return ogma.layouts.force({
+                  nodes: subNodes,
+                  duration: 0,
+                  useWebWorkers: false
+                })
+              }
+            }
+          })
+          transformation.whenApplied().then(function() {
+            return runLayout();
+          })
+
+        }
       });
     }
 

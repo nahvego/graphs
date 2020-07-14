@@ -1,0 +1,121 @@
+{
+    "nodes": [
+        {
+            "id": 1,
+            "cluster": 2,
+            "caption": "eliany mcivor"
+        },
+        {
+            "id": 2,
+            "cluster": 1,
+            "caption": "kaoru clearwater"
+        },
+        {
+            "id": 3,
+            "cluster": 1,
+            "caption": "përparime jager"
+        },
+        {
+            "id": 4,
+            "cluster": 5,
+            "caption": "tapainga quale"
+        },
+        {
+            "id": 5,
+            "cluster": 2,
+            "caption": "enso janoski"
+        },
+        {
+            "id": 6,
+            "cluster": 4,
+            "caption": "jimette lagatella"
+        },
+        {
+            "id": 7,
+            "cluster": 3,
+            "caption": "ayash lame"
+        },
+        {
+            "id": 8,
+            "cluster": 2,
+            "caption": "shemaka hudok"
+        },
+        {
+            "id": 9,
+            "cluster": 2,
+            "caption": "deamonte sefcheck"
+        },
+        {
+            "id": 10,
+            "cluster": 4,
+            "caption": "alinea pugeda"
+        },
+        {
+            "id": 11,
+            "cluster": 2,
+            "caption": "jacob-lee eastep"
+        },
+        {
+            "id": 12,
+            "cluster": 2,
+            "caption": "tsitsi slice"
+        },
+        {
+            "id": 13,
+            "cluster": 5,
+            "caption": "taym shott"
+        },
+        {
+            "id": 14,
+            "cluster": 5,
+            "caption": "tanzie faim"
+        },
+        {
+            "id": 15,
+            "cluster": 2,
+            "caption": "jazanae wynder"
+        },
+        {
+            "id": 16,
+            "cluster": 3,
+            "caption": "tshombe garand"
+        },
+        {
+            "id": 17,
+            "cluster": 2,
+            "caption": "kiata malave-santos"
+        },
+        {
+            "id": 18,
+            "cluster": 5,
+            "caption": "ellyce pieloch"
+        },
+        {
+            "id": 19,
+            "cluster": 5,
+            "caption": "giavannah hugall"
+        },
+        {
+            "id": 20,
+            "cluster": 2,
+            "caption": "wilde mentgen"
+        }
+    ],
+    "edges": [
+        {
+            "source": "17",
+            "target": "8",
+            "caption": "17-8"
+        },
+        {
+            "source": "18",
+            "target": "14",
+            "caption": "18-14"
+        },
+        {
+            "source": "1",
+            "target": "20",
+            "caption": "1-20"
+        }
+    ]
+}

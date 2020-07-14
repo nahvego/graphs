@@ -9,6 +9,8 @@ try {
 
     const linkSaturation = +process.argv[3] || .2; // or linkCount
 
+    const clusterCount = +process.argv[4] || 0;
+
     // https://raw.githubusercontent.com/philipperemy/name-dataset
 
     function randInt(min, max) { // [min, max)
@@ -46,6 +48,13 @@ try {
                 }
             }
         }
+
+        node.data = {};
+
+        if (clusterCount > 0) {
+            node.cluster = randInt(0, clusterCount) + 1;
+            node.data.cluster = node.cluster;
+        }
     }
 
     // linkSaturation is just linkCount
@@ -53,7 +62,10 @@ try {
         const map = {};
         let count = 0;
         while (count < linkSaturation) {
-            const link = `${randInt(0, nodeCount) + 1}:${randInt(0, nodeCount) + 1}`;
+            const origin = randInt(0, nodeCount) + 1;
+            const target = randInt(0, nodeCount) + 1;
+            //if (nodes[origin - 1].cluster !== nodes[target - 1].cluster) continue;
+            const link = `${origin}:${target}`;
             if (!map[link]) {
                 map[link] = 1;
                 count++;
@@ -93,7 +105,7 @@ try {
     if (relations.length > 0) {
         D3Object.links = relations;
     }
-    await fs.writeFile(`nodes_d3_${nodeCount}_${linkSaturation}.json`, JSON.stringify(D3Object, undefined, 4), "utf8");
+    await fs.writeFile(`nodes_d3_${nodeCount}_${linkSaturation}_${clusterCount}.json`, JSON.stringify(D3Object, undefined, 4), "utf8");
     // .then(json => {
         //     json.nodes.forEach(n => {
         //         n.caption = n.name;
@@ -118,7 +130,7 @@ try {
     GraphJSON.edges.forEach(e => {
         e.caption = `${e.source}-${e.target}`;
     });
-    await fs.writeFile(`nodes_gj_${nodeCount}_${linkSaturation}.json`, JSON.stringify(GraphJSON, undefined, 4), "utf8");
+    await fs.writeFile(`nodes_gj_${nodeCount}_${linkSaturation}_${clusterCount}.json`, JSON.stringify(GraphJSON, undefined, 4), "utf8");
 
 }());
 } catch (e) {

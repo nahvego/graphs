@@ -21,7 +21,7 @@
 
   <script src="//mrdoob.github.io/stats.js/build/stats.min.js"></script>
   <script src="0.4.1/scripts/vendor.js"></script>
-  <script src="0.4.1/alchemy.min.js"></script>
+  <script src="0.4.1/alchemy.js"></script>
   <script type="text/javascript">
     function addStatsPanel() {
       var stats = new Stats();
@@ -40,7 +40,9 @@
     }
         performance.mark("alchemy");
         var config = {
-            dataSource: "../nodes_gj_3000_1000.json",
+            dataSource: "../nodes_gj_20_3_5.json",
+            cluster: true,
+            clusterColours: ["#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02"],
             afterLoad: function() {
               console.log("loaded");
               const m = performance.measure("Alchemy load", "alchemy"); // non standard
@@ -50,7 +52,8 @@
             },
         };
 
-        alchemy = new Alchemy(config);
+        //alchemy = new Alchemy(config);
+        window.alchemyInstance = new Alchemy(config);
         
         //
         addStatsPanel();

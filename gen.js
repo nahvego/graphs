@@ -37,7 +37,17 @@ try {
             id: i + 1,
         };
 
+        
+
+        node.data = {};
+        
         node.name = `${names[randInt(0, names.length)].trim()} ${lastnames[randInt(0, lastnames.length)].trim()}`;
+        node.data.name = node.name;
+        
+        if (clusterCount > 0) {
+            node.cluster = randInt(0, clusterCount) + 1;
+            node.data.cluster = node.cluster;
+        }
         nodes.push(node);
 
         node.relations = [];
@@ -49,13 +59,6 @@ try {
                     node.relations.push(rel);
                 }
             }
-        }
-
-        node.data = {};
-
-        if (clusterCount > 0) {
-            node.cluster = randInt(0, clusterCount) + 1;
-            node.data.cluster = node.cluster;
         }
     }
 

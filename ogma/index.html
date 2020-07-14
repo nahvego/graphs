@@ -6,8 +6,10 @@
 
 <head>
   <meta charset="utf-8">
+  <script src="/common/common.js"></script>
   <script src="//mrdoob.github.io/stats.js/build/stats.min.js"></script>
   <script src="ogma.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/common/common.css" />
   <style>
     body {
       margin: 0;
@@ -331,7 +333,7 @@
     var isAnimated = false;
 
     function loadGraph(size) {
-      return ogma.parse.jsonFromUrl("../data/nodes_d3_3000_5000_5.json", function (input) {
+      return ogma.parse.jsonFromUrl("../data/nodes_d3_20_3_5.json", function (input) {
         return { nodes: input.nodes, edges: input.links};
       })
         .then(function (graph) {
@@ -487,6 +489,49 @@
         })
       }
     })
+
+    ogma.tools.tooltip.onNodeClick(function (n) {
+      const c = new Card({
+          position: { x: 500, y: 500 },
+          name: n.getData("name"),
+        });
+        c.unhide();
+        console.log(c.getElement());
+        return c.getElement();
+    });
+    ogma.events.onClick(function ({ target }) {
+      if (target) {
+        new Card({
+          position: { x: 500, y: 500 },
+          name: target.getData("name"),
+        });
+      }
+    });
+
+    ogma.styles.addNodeRule({
+      text: {
+        content: function (node) { return node.getId(); }
+      }
+    });
+
+    var lassoOptions = {
+      strokeWidth: 1,
+      bothExtremities: false,
+      callback: function (evt) {
+        console.log('lassoed\n nodes: ' + evt.nodes.getId() + '\n edges: ' + evt.edges.getId())
+        evt.nodes.setSelected(true);
+        // evt.edges.setSelected(true);
+      }
+    };
+
+    ogma.events.onDragStart(function () {
+      if (ogma.keyboard.isKeyPressed('ctrl')) {
+        ogma.getSelectedEdges().setSelected(false);
+        ogma.getSelectedNodes().setSelected(false);
+        ogma.tools.lasso.enable(lassoOptions);
+      }
+    });
+
 
     loadGraph(SIZES.medium).then(runLayout);
   </script>
